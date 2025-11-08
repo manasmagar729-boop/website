@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>The Future Market 4.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Orbitron:wght@600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;scroll-behavior:smooth}
+body{
+  font-family:'Inter',sans-serif;
+  background:radial-gradient(circle at 20% 20%,#00111F,#000);
+  color:#E6EDF3;overflow-x:hidden;position:relative;
+}
+/* animated moving gradient backdrop */
+body::before{
+  content:"";position:fixed;top:0;left:0;width:200%;height:200%;
+  background:linear-gradient(130deg,#00111F 0%,#011C33 25%,#00111F 50%,#011C33 75%,#00111F 100%);
+  background-size:400% 400%;z-index:-2;animation:gradientShift 25s ease infinite;
+}
+@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+/* floating glowing orbs */
+.orb{position:fixed;border-radius:50%;opacity:0.15;z-index:-1;filter:blur(90px);animation:float 20s ease-in-out infinite alternate}
+.orb:nth-child(1){width:400px;height:400px;top:10%;left:5%;background:#00C6FF;}
+.orb:nth-child(2){width:500px;height:500px;bottom:5%;right:10%;background:#FF0080;}
+@keyframes float{0%{transform:translateY(0)}100%{transform:translateY(-60px)}}
+
+nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.05);backdrop-filter:blur(10px);
+display:flex;justify-content:center;gap:30px;padding:15px 0;z-index:1000;box-shadow:0 0 20px rgba(0,198,255,0.1)}
+nav a{color:#E6EDF3;font-weight:bold;transition:0.3s}
+nav a:hover{color:#00C6FF;text-shadow:0 0 10px #00C6FF}
+h1,h2,h3{font-family:'Orbitron',sans-serif;color:#00C6FF;text-align:center}
+section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+padding:80px 20px;opacity:0;transform:translateY(100px) scale(0.95);transition:all 1.2s ease-out;}
+section.visible{opacity:1;transform:translateY(0) scale(1);}
+.fade-glow{animation:fadeGlow 6s ease-in-out infinite alternate}
+@keyframes fadeGlow{0%{opacity:0.8;text-shadow:0 0 10px #00C6FF}100%{opacity:1;text-shadow:0 0 20px #FF0080}}
+
+input{background:rgba(255,255,255,0.1);border:none;padding:10px;border-radius:6px;color:white;width:60%;margin-top:10px}
+button{background:linear-gradient(90deg,#00C6FF,#FF0080);border:none;color:white;padding:10px 18px;border-radius:6px;font-weight:bold;cursor:pointer;transition:0.3s}
+button:hover{opacity:0.85;transform:scale(1.05)}
+
+.market{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-top:30px;width:100%;max-width:900px}
+.card{background:rgba(255,255,255,0.05);padding:20px;border-radius:12px;
+transition:transform 0.6s ease,opacity 0.6s ease;opacity:0;transform:translateY(50px);text-align:center}
+.card.visible{opacity:1;transform:translateY(0)}
+.card:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 0 20px rgba(0,198,255,0.3)}
+.price{color:#00C6FF;font-weight:bold;font-size:1.2rem;margin:6px 0}
+.user-info{margin-top:20px;font-size:1rem;color:#aaa;text-align:center}
+#ai-bot{color:#aaa;margin-top:25px;font-style:italic;text-align:center;max-width:700px}
+#achievements{margin-top:20px;color:#00C6FF;text-align:center}
+.leaderboard{margin-top:40px;text-align:center;background:rgba(255,255,255,0.05);padding:20px;border-radius:12px;width:90%;max-width:600px}
+.leaderboard div{margin:6px 0}
+footer{text-align:center;padding:40px;color:#777;font-size:0.9rem}
+</style>
+</head>
+<body>
+<div class="orb"></div><div class="orb"></div>
+
+<nav>
+  <a href="#home">Home</a>
+  <a href="#market">Market</a>
+  <a href="#portfolio">Portfolio</a>
+  <a href="#about">About</a>
+</nav>
+
+<section id="home">
+  <h1 class="fade-glow">The Future Market 4.0</h1>
+  <p style="color:#aaa;margin-top:10px;text-align:center;max-width:600px">
+    Trade predictions. Shape tomorrow. Earn virtual wealth by betting on the future.
+  </p>
+  <div style="margin-top:40px" id="login">
+    <input id="username" placeholder="Enter your username...">
+    <button onclick="login()">Enter Market</button>
+  </div>
+</section>
+
+<section id="market">
+  <h2>Prediction Market</h2>
+  <div class="user-info">Credits: ₹<span id="credits"></span></div>
+  <button onclick="addPrediction()">+ Add Your Prediction</button>
+  <div class="market" id="marketGrid"></div>
+  <p id="ai-bot">🤖 Analyst Bot: Awaiting market data...</p>
+</section>
+
+<section id="portfolio">
+  <h2>Your Portfolio</h2>
+  <div id="portfolioList" style="margin-top:30px;width:100%;max-width:800px;text-align:center"></div>
+  <div id="achievements"></div>
+  <div class="leaderboard" id="leaderboard"></div>
+</section>
+
+<section id="about">
+  <h2>About This Simulation</h2>
+  <p style="max-width:700px;text-align:center;color:#bbb;margin-top:20px;line-height:1.6">
+    The Future Market 4.0 is an interactive simulation of the future economy —  
+    trade, predict, and compete in a neon digital world where imagination drives markets.  
+    Experience AI insights, dynamic world events, and glowing interfaces that evolve as you play.
+  </p>
+</section>
+
+<footer>© 2025 The Future Market — Built with 💙 and Imagination</footer>
+
+<script>
+const defaultPredictions=[
+  {id:1,title:"AI surpasses human intelligence by 2035",price:56},
+  {id:2,title:"Nepal achieves 100% renewable energy by 2040",price:48},
+  {id:3,title:"Affordable space tourism by 2030",price:63},
+  {id:4,title:"Nepali startup becomes global unicorn by 2028",price:72},
+  {id:5,title:"Humans land on Mars by 2035",price:59}
+];
+function loadDB(){
+  let db=localStorage.getItem("futureMarketDB");
+  if(!db){db={users:{},predictions:defaultPredictions};
+    localStorage.setItem("futureMarketDB",JSON.stringify(db));}
+  else db=JSON.parse(db);return db;
+}
+function saveDB(db){localStorage.setItem("futureMarketDB",JSON.stringify(db));}
+let db=loadDB();let username="",user={},predictions=db.predictions;
+
+function login(){
+  username=document.getElementById("username").value.trim();
+  if(!username)return alert("Enter a username");
+  if(!db.users[username])db.users[username]={credits:1000,portfolio:{}};
+  saveDB(db);
+  user=db.users[username];
+  document.getElementById("credits").textContent=user.credits;
+  renderMarket();renderPortfolio();checkAchievements();renderLeaderboard();
+  window.location="#market";
+}
+function addPrediction(){
+  const title=prompt("Enter your futuristic prediction:");
+  if(!title)return;
+  const newP={id:Date.now(),title,price:50};
+  predictions.push(newP);db.predictions=predictions;saveDB(db);renderMarket();
+}
+function trade(id,action){
+  const p=predictions.find(x=>x.id===id);
+  if(!p)return;const change=Math.floor(Math.random()*10)-5;
+  if(action==="buy"&&user.credits>=p.price){
+    user.credits-=p.price;user.portfolio[id]=(user.portfolio[id]||0)+1;p.price+=Math.abs(change);
+  }else if(action==="sell"&&(user.portfolio[id]||0)>0){
+    user.credits+=p.price;user.portfolio[id]-=1;p.price-=Math.abs(change);if(p.price<1)p.price=1;
+  }else return alert("Not enough credits or shares.");
+  db.users[username]=user;db.predictions=predictions;saveDB(db);
+  document.getElementById("credits").textContent=user.credits;
+  renderMarket();renderPortfolio();checkAchievements();renderLeaderboard();
+}
+function renderMarket(){
+  const m=document.getElementById("marketGrid");m.innerHTML="";
+  predictions.forEach(p=>{
+    const c=document.createElement("div");c.className="card";
+    const owned=user.portfolio[p.id]||0;
+    c.innerHTML=`<b>${p.title}</b>
+      <div class="price">₹${p.price}</div>
+      <div>Owned: ${owned}</div>
+      <button onclick="trade(${p.id},'buy')">Buy</button>
+      <button onclick="trade(${p.id},'sell')">Sell</button>`;
+    m.appendChild(c);
+  });
+  aiInsight();revealOnScroll();
+}
+function renderPortfolio(){
+  const port=document.getElementById("portfolioList");port.innerHTML="";
+  const items=Object.keys(user.portfolio);
+  if(!items.length){port.innerHTML="<p style='color:#777'>No assets yet. Start trading!</p>";return;}
+  let total=0;const list=document.createElement("div");
+  items.forEach(id=>{
+    const p=predictions.find(x=>x.id==id);
+    const qty=user.portfolio[id];
+    const value=qty*p.price;total+=value;
+    const item=document.createElement("div");
+    item.style.margin="10px";
+    item.innerHTML=`<b>${p.title}</b> — ${qty} × ₹${p.price}= ₹${value}`;
+    list.appendChild(item);
+  });
+  const totalEl=document.createElement("h3");
+  totalEl.style.color="#00C6FF";totalEl.textContent=`Total Portfolio Value: ₹${total}`;
+  port.appendChild(list);port.appendChild(totalEl);revealOnScroll();
+}
+function checkAchievements(){
+  const a=[];
+  if(Object.keys(user.portfolio).length>0)a.push("🥇 First Trade");
+  if(user.credits>2000)a.push("💰 Wealth Builder");
+  if(Object.keys(user.portfolio).length>3)a.push("🌟 Market Explorer");
+  if(user.credits>10000)a.push("🚀 Visionary Investor");
+  document.getElementById("achievements").innerHTML=a.join(" • ")||"No achievements yet.";
+}
+function renderLeaderboard(){
+  const lb=document.getElementById("leaderboard");
+  const list=Object.entries(db.users).map(([name,u])=>{
+    const val=Object.keys(u.portfolio)
+      .reduce((t,id)=>t+(predictions.find(p=>p.id==id)?.price*u.portfolio[id]||0),0);
+    return {name,wealth:u.credits+val};
+  }).sort((a,b)=>b.wealth-a.wealth);
+  let html="<h3>🏆 Leaderboard</h3>";
+  list.slice(0,5).forEach((u,i)=>{
+    html+=`<div>${i+1}. ${u.name} — ₹${u.wealth}</div>`;
+  });
+  lb.innerHTML=html;
+}
+function aiInsight(){
+  if(!predictions.length)return;
+  const hot=predictions.reduce((a,b)=>a.price>b.price?a:b);
+  const cold=predictions.reduce((a,b)=>a.price<b.price?a:b);
+  const msg=`🤖 Analyst Insight: "${hot.title}" is trending hot 🔥 while "${cold.title}" cools down ❄️.`;
+  document.getElementById("ai-bot").innerText=msg;
+}
+const news=[
+  {keyword:"AI",impact:10,message:"AI breakthrough boosts optimism!"},
+  {keyword:"Mars",impact:-8,message:"Mars mission delay shocks investors!"},
+  {keyword:"startup",impact:5,message:"New Nepali startup gets funding!"},
+  {keyword:"energy",impact:7,message:"Clean energy push lifts renewables!"},
+  {keyword:"tourism",impact:-6,message:"Space tourism setback shakes market!"}
+];
+setInterval(()=>{
+  if(!username)return;
+  const n=news[Math.floor(Math.random()*news.length)];
+  predictions.forEach(p=>{
+    if(p.title.toLowerCase().includes(n.keyword)){p.price=Math.max(1,p.price+n.impact);}
+  });
+  db.predictions=predictions;saveDB(db);
+  const alertBox=document.createElement("div");
+  alertBox.style.position="fixed";alertBox.style.top="20px";alertBox.style.left="50%";
+  alertBox.style.transform="translateX(-50%)";alertBox.style.background="rgba(0,198,255,0.2)";
+  alertBox.style.padding="15px 25px";alertBox.style.borderRadius="8px";
+  alertBox.style.backdropFilter="blur(6px)";alertBox.style.zIndex="9999";
+  alertBox.textContent="📢 "+n.message;document.body.appendChild(alertBox);
+  setTimeout(()=>alertBox.remove(),4000);renderMarket();renderLeaderboard();
+},45000);
+function revealOnScroll(){
+  const elements=document.querySelectorAll("section,.card");
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){entry.target.classList.add("visible");}
+    });
+  },{threshold:0.2});
+  elements.forEach(el=>observer.observe(el));
+}
+window.onload=revealOnScroll;
+</script>
+</body>
+</html>
